@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    company: { type: String, default: "" }, // Optional, for employers
+    company: { type: String, default: "" },
+    companyOverview: { type: String }, // Optional, for employers
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: {

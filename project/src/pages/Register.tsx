@@ -13,6 +13,7 @@ function Register() {
     password: '',
     role: 'jobseeker',
     company: '',
+    companyOverview: '', // ✅ new field
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,6 +48,7 @@ function Register() {
         <h1 className="text-2xl font-bold text-center mb-8">Create Account</h1>
 
         <form onSubmit={handleSubmit}>
+          {/* Full Name */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Full Name</label>
             <input
@@ -58,6 +60,7 @@ function Register() {
             />
           </div>
 
+          {/* Email */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Email</label>
             <input
@@ -69,6 +72,7 @@ function Register() {
             />
           </div>
 
+          {/* Password */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Password</label>
             <input
@@ -80,6 +84,7 @@ function Register() {
             />
           </div>
 
+          {/* Role Selection */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Account Type</label>
             <select
@@ -92,19 +97,33 @@ function Register() {
             </select>
           </div>
 
+          {/* Employer-Specific Fields */}
           {formData.role === 'employer' && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Company Name</label>
-              <input
-                type="text"
-                value={formData.company}
-                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                className={`w-full p-3 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} border focus:ring-2 focus:ring-blue-500`}
-                required
-              />
-            </div>
+            <>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Company Name</label>
+                <input
+                  type="text"
+                  value={formData.company}
+                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  className={`w-full p-3 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} border focus:ring-2 focus:ring-blue-500`}
+                  required
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Company Overview</label>
+                <textarea
+                  value={formData.companyOverview}
+                  onChange={(e) => setFormData({ ...formData, companyOverview: e.target.value })}
+                  className={`w-full p-3 rounded-lg h-28 resize-none ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} border focus:ring-2 focus:ring-blue-500`}
+                  placeholder="Describe your company"
+                ></textarea>
+              </div>
+            </>
           )}
 
+          {/* Submit */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"

@@ -18,6 +18,7 @@ const JobPost: React.FC = () => {
     type: "Full Time",
     description: "",
     salary: "",
+    requirements: "",
   });
 
   const [error, setError] = useState("");
@@ -45,43 +46,42 @@ const JobPost: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  const finalCategory =
-    selectedCategory === "Other" ? customCategory.trim() : selectedCategory;
+    e.preventDefault();
+    const finalCategory =
+      selectedCategory === "Other" ? customCategory.trim() : selectedCategory;
 
-  if (!finalCategory) {
-    setError("Please select or enter a category");
-    return;
-  }
-
-  const token = localStorage.getItem("token"); // ✅ Get token from localStorage
-
-  try {
-    const res = await fetch("https://jobportal-l1t5.onrender.com/api/jobs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // ✅ Add token to headers
-      },
-      body: JSON.stringify({
-        ...formData,
-        postedBy: currentUser?._id,
-        category: finalCategory,
-      }),
-    });
-
-    if (res.ok) {
-      setSuccess("Job posted successfully!");
-      setTimeout(() => navigate("/employer/dashboard"), 1500);
-    } else {
-      const data = await res.json();
-      setError(data.error || "Failed to post job");
+    if (!finalCategory) {
+      setError("Please select or enter a category");
+      return;
     }
-  } catch (err) {
-    setError("Server error");
-  }
-};
 
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch("https://jobportal-l1t5.onrender.com/api/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...formData,
+          postedBy: currentUser?._id,
+          category: finalCategory,
+        }),
+      });
+
+      if (res.ok) {
+        setSuccess("Job posted successfully!");
+        setTimeout(() => navigate("/employer/dashboard"), 1500);
+      } else {
+        const data = await res.json();
+        setError(data.error || "Failed to post job");
+      }
+    } catch (err) {
+      setError("Server error");
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -176,14 +176,27 @@ const JobPost: React.FC = () => {
         )}
 
         <div className="mb-4">
-          <label>Salary</label>
+          <label>Salary (e.g. 10000-20000)</label>
           <input
             name="salary"
-            type="number"
+            type="text"
             value={formData.salary}
             onChange={handleChange}
+            placeholder="10000-20000"
             className="w-full p-2 border rounded"
+            required
           />
+        </div>
+
+        <div className="mb-4">
+          <label>Requirements</label>
+          <textarea
+            name="requirements"
+            value={formData.requirements}
+            onChange={handleChange}
+            placeholder="E.g. 2+ years experience, React, Node.js, etc."
+            className="w-full p-2 border rounded h-24"
+          ></textarea>
         </div>
 
         <div className="mb-4">
@@ -192,7 +205,8 @@ const JobPost: React.FC = () => {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded h-32"
+            required
           ></textarea>
         </div>
 

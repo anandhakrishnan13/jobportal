@@ -7,10 +7,13 @@ const jobSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['Full Time', 'Part Time', 'Internship', 'Remote'],
-    default: 'Full Time'
+    default: 'Full Time',
+    required: true
   },
-  description: { type: String },
-  salary: { type: Number },
+  category: { type: String, required: true }, // ✅ required category
+  description: { type: String, required: true },
+  requirements: { type: String, required: true },              // ✅ optional requirements
+  salary: { type: String, required: true },    // ✅ salary as range (string)
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
