@@ -11,10 +11,7 @@ import categoryRoutes from './routes/categoryRoutes.js';
 dotenv.config();
 
 const app = express();
-app.use(cors({
-  origin: 'http://localhost:3000',  // You can allow multiple origins if needed
-  credentials: true,                // Optional: allow cookies if you use them
-}));
+app.use(cors({}));
 app.use(express.json());
 
 // Routes
