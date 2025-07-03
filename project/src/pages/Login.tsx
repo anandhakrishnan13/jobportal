@@ -13,43 +13,46 @@ function Login() {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const response = await fetch("https://jobportal-l1t5.onrender.com/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+  try {
+    const response = await fetch("https://jobportal-l1t5.onrender.com/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // ✅ Save JWT token to localStorage
+      localStorage.setItem("token", data.token);
+
+      // ✅ Save user data to global state
+      setCurrentUser({
+        _id: data.user._id,
+        name: data.user.name,
+        email: data.user.email,
+        role: data.user.role,
+        company: data.user.company || "",
+        createdAt: data.user.createdAt,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-
-        // ✅ Ensure _id and company are included in the user object
-        setCurrentUser({
-          _id: data.user._id,
-          name: data.user.name,
-          email: data.user.email,
-          role: data.user.role,
-          company: data.user.company || "",
-          createdAt: data.user.createdAt,
-        });
-
-        if (data.user.role === "jobseeker") {
-          navigate("/jobs");
-        } else if (data.user.role === "employer") {
-          navigate("/employer/dashboard");
-        } else {
-          navigate("/");
-        }
+      // ✅ Redirect based on role
+      if (data.user.role === "jobseeker") {
+        navigate("/jobs");
+      } else if (data.user.role === "employer") {
+        navigate("/employer/dashboard");
       } else {
-        const errorData = await response.json();
-        setError(errorData.error || "Login failed");
+        navigate("/");
       }
-    } catch (error) {
-      setError("Server error");
+    } else {
+      setError(data.error || "Login failed");
     }
-  };
+  } catch (error) {
+    setError("Server error");
+  }
+};
 
   return (
     <div className="max-w-md mx-auto">

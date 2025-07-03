@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MapPin, Building2, Clock, Send } from "lucide-react";
 import { useStore } from "../store";
@@ -27,7 +27,12 @@ function JobDetails() {
 
         // 2. Check if jobseeker already applied
         if (currentUser?.role === "jobseeker") {
-          const appRes = await fetch("https://jobportal-l1t5.onrender.com/api/applications");
+          const token = localStorage.getItem("token");
+          const appRes = await fetch("https://jobportal-l1t5.onrender.com/api/applications", {
+            headers: {
+              Authorization: `Bearer ${token}`, // ✅ JWT header
+            },
+          });
           const apps = await appRes.json();
 
           const alreadyApplied = apps.some(

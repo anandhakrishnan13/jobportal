@@ -44,9 +44,14 @@ const handleSubmit = async (e: React.FormEvent) => {
   formData.append("coverLetter", coverLetter);
   formData.append("resume", resumeFile);
 
+  const token = localStorage.getItem("token"); // ✅ Get token
+
   try {
     const res = await fetch("https://jobportal-l1t5.onrender.com/api/applications", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ Attach token
+      },
       body: formData,
     });
 
@@ -61,6 +66,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     setError("Server error");
   }
 };
+
 
   if (!job) return <div className="p-6">Loading job details...</div>;
 

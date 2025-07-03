@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, MapPin, Building2, Clock } from "lucide-react";
 import { Job } from "../types";
@@ -12,29 +12,26 @@ function Jobs() {
 
   // Fetch jobs from backend
   useEffect(() => {
-  const fetchJobs = async () => {
-    try {
-      const query = new URLSearchParams();
-      if (searchTerm) query.append("search", searchTerm);
-      if (selectedCategory) query.append("category", selectedCategory);
+    const fetchJobs = async () => {
+      try {
+        const query = new URLSearchParams();
+        if (searchTerm) query.append("search", searchTerm);
+        if (selectedCategory) query.append("category", selectedCategory);
 
-      const res = await fetch(
-        `https://jobportal-l1t5.onrender.com/api/jobs?${query.toString()}`
-      );
-      const data = await res.json();
-      setJobs(data);
-    } catch (err) {
-      console.error("Failed to fetch jobs:", err);
-    }
-  };
+        const res = await fetch(
+          `https://jobportal-l1t5.onrender.com/api/jobs?${query.toString()}`
+        );
+        const data = await res.json();
+        setJobs(data);
+      } catch (err) {
+        console.error("Failed to fetch jobs:", err);
+      }
+    };
 
-  fetchJobs();
-}, [searchTerm, selectedCategory]);
+    fetchJobs();
+  }, [searchTerm, selectedCategory]);
 
-
-  
-
-  const categories = [...new Set(jobs.map((job) => job.category))];
+  const categories = [...new Set(jobs.map((job) => job.category || "Uncategorized"))];
 
   return (
     <div className={`${isDarkMode ? "text-white" : "text-gray-900"}`}>
@@ -70,8 +67,8 @@ function Jobs() {
           >
             <option value="">All Categories</option>
             {categories.map((category, index) => (
-              <option key={category || index} value={category}>
-                {category || "Uncategorized"}
+              <option key={index} value={category}>
+                {category}
               </option>
             ))}
           </select>
@@ -79,56 +76,60 @@ function Jobs() {
       </div>
 
       <div className="grid gap-6">
-        {jobs.map((job) => (
-          <Link
-            key={job._id}
-            to={`/jobs/${job._id}`}
-            className={`${
-              isDarkMode
-                ? "bg-gray-800 hover:bg-gray-700"
-                : "bg-white hover:bg-gray-50"
-            } p-6 rounded-lg shadow-md transition`}
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
-                <div className="flex items-center text-gray-500 mb-2">
-                  <Building2 className="w-4 h-4 mr-1" />
-                  <span className="mr-4">{job.company}</span>
-                  <MapPin className="w-4 h-4 mr-1" />
-                  <span>{job.location}</span>
+        {jobs.length === 0 ? (
+          <p className="text-center text-gray-500">No jobs found.</p>
+        ) : (
+          jobs.map((job) => (
+            <Link
+              key={job._id}
+              to={`/jobs/${job._id}`}
+              className={`${
+                isDarkMode
+                  ? "bg-gray-800 hover:bg-gray-700"
+                  : "bg-white hover:bg-gray-50"
+              } p-6 rounded-lg shadow-md transition`}
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
+                  <div className="flex items-center text-gray-500 mb-2">
+                    <Building2 className="w-4 h-4 mr-1" />
+                    <span className="mr-4">{job.company}</span>
+                    <MapPin className="w-4 h-4 mr-1" />
+                    <span>{job.location}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        isDarkMode ? "bg-gray-700" : "bg-gray-100"
+                      }`}
+                    >
+                      {job.type}
+                    </span>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        isDarkMode ? "bg-gray-700" : "bg-gray-100"
+                      }`}
+                    >
+                      {job.category || "Other"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      isDarkMode ? "bg-gray-700" : "bg-gray-100"
-                    }`}
-                  >
-                    {job.type}
-                  </span>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      isDarkMode ? "bg-gray-700" : "bg-gray-100"
-                    }`}
-                  >
-                    {job.category || "Other"}
-                  </span>
+                <div className="text-right">
+                  <div className="text-lg font-semibold text-blue-600">
+                    {job.salary}
+                  </div>
+                  <div className="flex items-center text-gray-500 mt-2">
+                    <Clock className="w-4 h-4 mr-1" />
+                    <span className="text-sm">
+                      Posted {new Date(job.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-lg font-semibold text-blue-600">
-                  {job.salary}
-                </div>
-                <div className="flex items-center text-gray-500 mt-2">
-                  <Clock className="w-4 h-4 mr-1" />
-                  <span className="text-sm">
-                    Posted {new Date(job.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );

@@ -45,37 +45,43 @@ const JobPost: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const finalCategory =
-      selectedCategory === "Other" ? customCategory.trim() : selectedCategory;
+  e.preventDefault();
+  const finalCategory =
+    selectedCategory === "Other" ? customCategory.trim() : selectedCategory;
 
-    if (!finalCategory) {
-      setError("Please select or enter a category");
-      return;
+  if (!finalCategory) {
+    setError("Please select or enter a category");
+    return;
+  }
+
+  const token = localStorage.getItem("token"); // ✅ Get token from localStorage
+
+  try {
+    const res = await fetch("https://jobportal-l1t5.onrender.com/api/jobs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // ✅ Add token to headers
+      },
+      body: JSON.stringify({
+        ...formData,
+        postedBy: currentUser?._id,
+        category: finalCategory,
+      }),
+    });
+
+    if (res.ok) {
+      setSuccess("Job posted successfully!");
+      setTimeout(() => navigate("/employer/dashboard"), 1500);
+    } else {
+      const data = await res.json();
+      setError(data.error || "Failed to post job");
     }
+  } catch (err) {
+    setError("Server error");
+  }
+};
 
-    try {
-      const res = await fetch("https://jobportal-l1t5.onrender.com/api/jobs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          postedBy: currentUser?._id,
-          category: finalCategory,
-        }),
-      });
-
-      if (res.ok) {
-        setSuccess("Job posted successfully!");
-        setTimeout(() => navigate("/employer/dashboard"), 1500);
-      } else {
-        const data = await res.json();
-        setError(data.error || "Failed to post job");
-      }
-    } catch (err) {
-      setError("Server error");
-    }
-  };
 
   return (
     <div className="max-w-2xl mx-auto p-6">

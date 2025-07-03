@@ -15,9 +15,13 @@ const EditJob = () => {
     category: "",
   });
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const fetchJob = async () => {
     try {
       const res = await fetch(`https://jobportal-l1t5.onrender.com/api/jobs/${jobId}`);
+      if (!res.ok) throw new Error("Failed to fetch job details");
       const data = await res.json();
       setJobData({
         title: data.title,
@@ -30,20 +34,31 @@ const EditJob = () => {
       });
     } catch (err) {
       console.error("Failed to fetch job details", err);
+      setError("Failed to load job details. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setJobData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
     try {
       const res = await fetch(`https://jobportal-l1t5.onrender.com/api/jobs/${jobId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ Secure request
+        },
         body: JSON.stringify({
           type: jobData.type,
           salary: jobData.salary,
@@ -52,12 +67,15 @@ const EditJob = () => {
       });
 
       if (res.ok) {
+        alert("Job updated successfully!");
         navigate("/employer/dashboard");
       } else {
-        alert("Failed to update job");
+        const errData = await res.json();
+        alert(errData.error || "Failed to update job");
       }
     } catch (err) {
       console.error("Error updating job", err);
+      alert("Server error while updating job");
     }
   };
 
@@ -65,11 +83,14 @@ const EditJob = () => {
     fetchJob();
   }, [jobId]);
 
+  if (loading) return <div className="text-center mt-8">Loading job data...</div>;
+  if (error) return <div className="text-red-500 text-center mt-8">{error}</div>;
+
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow rounded">
       <h2 className="text-2xl font-bold mb-2">Edit Job</h2>
       <p className="text-sm text-yellow-600 mb-6">
-        ✨ <strong>Note:</strong> Only <em>Job Type</em>, <em>Salary</em>, and <em>Description</em> can be updated. 
+        ✨ <strong>Note:</strong> Only <em>Job Type</em>, <em>Salary</em>, and <em>Description</em> can be updated.
         All other fields are read-only for security reasons.
       </p>
       <form onSubmit={handleUpdate} className="space-y-4">

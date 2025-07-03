@@ -29,11 +29,22 @@ function EmployerDashboard() {
     useState<Application | null>(null);
 
   const fetchJobsAndApplications = async () => {
+    const token = localStorage.getItem("token");
+
     try {
       const [jobRes, appRes] = await Promise.all([
-        fetch("https://jobportal-l1t5.onrender.com/api/jobs"),
-        fetch("https://jobportal-l1t5.onrender.com/api/applications"),
+        fetch("https://jobportal-l1t5.onrender.com/api/jobs", {
+          headers: {
+            Authorization: `Bearer ${token}`, // 🔐 secure request
+          },
+        }),
+        fetch("https://jobportal-l1t5.onrender.com/api/applications", {
+          headers: {
+            Authorization: `Bearer ${token}`, // 🔐 secure request
+          },
+        }),
       ]);
+
       const jobData = await jobRes.json();
       const appData = await appRes.json();
 
@@ -83,12 +94,17 @@ function EmployerDashboard() {
   const updateStatus = async (status: "accepted" | "rejected") => {
     if (!selectedApplication) return;
 
+    const token = localStorage.getItem("token");
+
     try {
       const res = await fetch(
         `https://jobportal-l1t5.onrender.com/api/applications/${selectedApplication._id}/status`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // 🔐
+          },
           body: JSON.stringify({ status }),
         }
       );
@@ -261,11 +277,11 @@ function EmployerDashboard() {
                   {selectedApplication.coverLetter}
                 </p>
 
-                {selectedApplication.resume?.data?.data &&
+                {selectedApplication.resume?.data &&
                   (() => {
                     const base64 = btoa(
                       String.fromCharCode(
-                        ...new Uint8Array(selectedApplication.resume.data.data)
+                        ...new Uint8Array(selectedApplication.resume.data)
                       )
                     );
                     const fileUrl = `data:${selectedApplication.resume.contentType};base64,${base64}`;
@@ -356,19 +372,29 @@ function EmployerDashboard() {
                           )
                         ) {
                           try {
+                            const token = localStorage.getItem("token");
+
                             const res = await fetch(
                               `https://jobportal-l1t5.onrender.com/api/jobs/${job._id}`,
                               {
                                 method: "DELETE",
+                                headers: {
+                                  Authorization: `Bearer ${token}`, // 🔐 add JWT token here
+                                },
                               }
                             );
+
                             if (res.ok) {
                               setJobs((prev) =>
                                 prev.filter((j) => j._id !== job._id)
                               );
+                            } else {
+                              const data = await res.json();
+                              alert(data.error || "Failed to delete job");
                             }
                           } catch (err) {
                             console.error("Failed to delete job", err);
+                            alert("Server error while deleting job");
                           }
                         }
                       }}

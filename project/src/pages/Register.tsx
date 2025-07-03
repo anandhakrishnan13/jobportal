@@ -6,7 +6,7 @@ import { useStore } from '../store';
 function Register() {
   const navigate = useNavigate();
   const isDarkMode = useStore((state) => state.isDarkMode);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,35 +16,34 @@ function Register() {
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const response = await fetch('https://jobportal-l1t5.onrender.com/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
+    e.preventDefault();
+    try {
+      const response = await fetch('https://jobportal-l1t5.onrender.com/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      alert('Registration successful! Please log in.');
-      navigate('/login');
-    } else {
-      alert(data.error || 'Registration failed');
+      if (response.ok) {
+        alert('Registration successful! Please log in.');
+        navigate('/login');
+      } else {
+        alert(data.error || 'Registration failed');
+      }
+    } catch (error) {
+      alert('Something went wrong. Please try again.');
     }
-  } catch (error) {
-    alert('Something went wrong. Please try again.');
-  }
-};
-
+  };
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-8`}>
+    <div className="max-w-md mx-auto mt-10">
+      <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} rounded-lg shadow-md p-8`}>
         <div className="flex items-center justify-center mb-8">
           <UserPlus className="w-12 h-12 text-blue-600" />
         </div>
-        
+
         <h1 className="text-2xl font-bold text-center mb-8">Create Account</h1>
 
         <form onSubmit={handleSubmit}>
@@ -112,13 +111,14 @@ function Register() {
           >
             Create Account
           </button>
+
           <p className="text-sm text-center mt-4">
-            Have an account?{" "}
+            Have an account?{' '}
             <span
               className="text-blue-600 hover:underline cursor-pointer"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate('/login')}
             >
-              Loging
+              Login
             </span>
           </p>
         </form>

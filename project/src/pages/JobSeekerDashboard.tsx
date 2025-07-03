@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   LineChart,
   Line,
@@ -24,7 +24,6 @@ function JobSeekerDashboard() {
     { week: string; applications: number }[]
   >([]);
 
-  // Fetch jobs and applications on first mount
   useEffect(() => {
     const fetchApplicationsAndJobs = async () => {
       try {
@@ -44,7 +43,6 @@ function JobSeekerDashboard() {
     fetchApplicationsAndJobs();
   }, []);
 
-  // ✅ Memoized filtering of applications for current user
   const userApplications = useMemo(() => {
     return applications.filter((app) => {
       const userId =
@@ -53,7 +51,6 @@ function JobSeekerDashboard() {
     });
   }, [applications, currentUser?._id]);
 
-  // 🧠 Prepare weekly application chart data
   useEffect(() => {
     if (!currentUser || !currentUser.createdAt) return;
 
@@ -177,10 +174,11 @@ function JobSeekerDashboard() {
             </thead>
             <tbody>
               {userApplications.map((app) => {
-                const job =
+                const jobId =
                   typeof app.jobId === "string"
-                    ? jobs.find((j) => j._id === app.jobId)
-                    : jobs.find((j) => j._id === app.jobId._id);
+                    ? app.jobId
+                    : app.jobId?._id;
+                const job = jobs.find((j) => j._id === jobId);
 
                 return (
                   <tr
