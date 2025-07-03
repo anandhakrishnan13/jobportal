@@ -47,11 +47,19 @@ const JobPost: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+
     const finalCategory =
       selectedCategory === "Other" ? customCategory.trim() : selectedCategory;
 
     if (!finalCategory) {
       setError("Please select or enter a category");
+      return;
+    }
+
+    if (!formData.title || !formData.location || !formData.description || !formData.salary) {
+      setError("Please fill in all required fields");
       return;
     }
 
@@ -68,6 +76,10 @@ const JobPost: React.FC = () => {
           ...formData,
           postedBy: currentUser?._id,
           category: finalCategory,
+          requirements: formData.requirements
+            .split(",")
+            .map((req) => req.trim())
+            .filter((req) => req.length > 0),
         }),
       });
 
@@ -79,7 +91,7 @@ const JobPost: React.FC = () => {
         setError(data.error || "Failed to post job");
       }
     } catch (err) {
-      setError("Server error");
+      setError("Server error while posting job");
     }
   };
 
@@ -189,7 +201,7 @@ const JobPost: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <label>Requirements</label>
+          <label>Requirements <span className="text-sm text-gray-500">(Comma-separated)</span></label>
           <textarea
             name="requirements"
             value={formData.requirements}
