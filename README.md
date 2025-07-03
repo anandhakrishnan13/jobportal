@@ -66,7 +66,7 @@ npm install
 🔐 Backend .env
 Create a .env file in backend/:
 PORT=5000
-MONGO_URI=mongodb+srv://jobadmin:bisbi@taskmanager.h9rx086.mongodb.net/?retryWrites=true&w=majority&appName=TaskManager
+MONGO_URI=mongodb+srv://database:password@cluster.h9rx086.mongodb.net/?retryWrites=true&w=majority&appName=TaskManager
 JWT_SECRET=yourSuperSecureSecret
 4. Run the App
 ⬅️ Backend (port 5000)
