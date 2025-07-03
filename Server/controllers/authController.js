@@ -45,7 +45,7 @@ export const registerUser = async (req, res) => {
         role: newUser.role,
         company: newUser.company || "",
         _id: newUser._id,
-        createdAt: user.createdAt,
+        createdAt: newUser.createdAt,
       },
     });
   } catch (err) {
