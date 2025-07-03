@@ -31,8 +31,8 @@ function EmployerDashboard() {
 
     try {
       const [jobRes, appRes] = await Promise.all([
-        fetch("http://localhost:5000/api/jobs", { headers: { Authorization: `Bearer ${token}` } }),
-        fetch("http://localhost:5000/api/applications", { headers: { Authorization: `Bearer ${token}` } })
+        fetch("https://jobportal-480g.onrender.com/api/jobs", { headers: { Authorization: `Bearer ${token}` } }),
+        fetch("https://jobportal-480g.onrender.com/api/applications", { headers: { Authorization: `Bearer ${token}` } })
       ]);
 
       if (!jobRes.ok || !appRes.ok) {
@@ -90,7 +90,7 @@ function EmployerDashboard() {
 
   try {
     const res = await fetch(
-      `http://localhost:5000/api/applications/${selectedApplication._id}/status`,
+      `https://jobportal-480g.onrender.com/api/applications/${selectedApplication._id}/status`,
       {
         method: "PUT",
         headers: {

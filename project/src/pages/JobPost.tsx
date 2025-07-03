@@ -27,7 +27,7 @@ const JobPost: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/categories");
+        const res = await fetch("https://jobportal-480g.onrender.com/api/categories");
         const data = await res.json();
         setCategories(data);
       } catch (err) {
@@ -66,7 +66,7 @@ const JobPost: React.FC = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/jobs", {
+      const res = await fetch("https://jobportal-480g.onrender.com/api/jobs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -20,7 +20,7 @@ const EditJob = () => {
 
   const fetchJob = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/jobs/${jobId}`);
+      const res = await fetch(`https://jobportal-480g.onrender.com/api/jobs/${jobId}`);
       if (!res.ok) throw new Error("Failed to fetch job details");
       const data = await res.json();
       setJobData({
@@ -53,7 +53,7 @@ const EditJob = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://localhost:5000/api/jobs/${jobId}`, {
+      const res = await fetch(`https://jobportal-480g.onrender.com/api/jobs/${jobId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
