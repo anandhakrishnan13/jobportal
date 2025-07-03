@@ -28,8 +28,8 @@ function JobSeekerDashboard() {
     const fetchApplicationsAndJobs = async () => {
       try {
         const [appRes, jobRes] = await Promise.all([
-          fetch("https://jobportal-l1t5.onrender.com/api/applications"),
-          fetch("https://jobportal-l1t5.onrender.com/api/jobs"),
+          fetch("http://localhost:5000/api/applications"),
+          fetch("http://localhost:5000/api/jobs"),
         ]);
         const apps = await appRes.json();
         const jobs = await jobRes.json();
@@ -52,43 +52,50 @@ function JobSeekerDashboard() {
   }, [applications, currentUser?._id]);
 
   useEffect(() => {
-    if (!currentUser || !currentUser.createdAt) return;
+  if (!currentUser) return;
 
-    const userCreatedAt = new Date(currentUser.createdAt);
-    const weekMap: Record<string, number> = {};
+  const userCreatedAt = userApplications.length
+    ? new Date(userApplications[0].appliedDate)
+    : new Date();
 
-    userApplications.forEach((app) => {
-      const appliedAt = new Date(app.appliedDate);
-      const diffDays = Math.floor(
-        (appliedAt.getTime() - userCreatedAt.getTime()) / (1000 * 60 * 60 * 24)
-      );
-      const weekNumber = Math.floor(diffDays / 7) + 1;
-      const weekLabel = `Week ${weekNumber < 1 ? 1 : weekNumber}`;
-      weekMap[weekLabel] = (weekMap[weekLabel] || 0) + 1;
-    });
+  const weekMap: Record<string, number> = {};
 
-    if (Object.keys(weekMap).length === 0) {
-      weekMap["Week 1"] = 0;
-    }
+  userApplications.forEach((app) => {
+    const appliedAt = new Date(app.appliedDate);
+    const diffDays = Math.floor(
+      (appliedAt.getTime() - userCreatedAt.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    const weekNumber = Math.floor(diffDays / 7) + 1;
+    const weekLabel = `Week ${weekNumber < 1 ? 1 : weekNumber}`;
+    weekMap[weekLabel] = (weekMap[weekLabel] || 0) + 1;
+  });
 
-    const chartData = Object.entries(weekMap)
-      .sort(([a], [b]) => {
-        const numA = parseInt(a.split(" ")[1]);
-        const numB = parseInt(b.split(" ")[1]);
-        return numA - numB;
-      })
-      .map(([week, count]) => ({
-        week,
-        applications: count,
-      }));
+  if (Object.keys(weekMap).length === 0) {
+    setApplicationData([{ week: "Week 1", applications: 0 }]);
+    return;
+  }
 
-    setApplicationData(chartData);
-  }, [userApplications, currentUser]);
+  const chartData = Object.entries(weekMap)
+    .sort(([a], [b]) => {
+      const numA = parseInt(a.split(" ")[1]);
+      const numB = parseInt(b.split(" ")[1]);
+      return numA - numB;
+    })
+    .map(([week, count]) => ({
+      week,
+      applications: count,
+    }));
+
+  setApplicationData(chartData);
+}, [userApplications, currentUser]);
 
   const handleLogout = () => {
     setCurrentUser(null);
     navigate("/");
   };
+
+
+
 
   return (
     <div className={`${isDarkMode ? "text-white" : "text-gray-900"}`}>

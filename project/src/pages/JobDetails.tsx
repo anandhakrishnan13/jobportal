@@ -19,14 +19,14 @@ function JobDetails() {
       try {
         setLoading(true);
 
-        const res = await fetch(`https://jobportal-l1t5.onrender.com/api/jobs/${id}`);
+        const res = await fetch(`http://localhost:5000/api/jobs/${id}`);
         if (!res.ok) throw new Error("Job not found");
         const jobData = await res.json();
         setJob(jobData);
 
         if (currentUser?.role === "jobseeker") {
           const token = localStorage.getItem("token");
-          const appRes = await fetch("https://jobportal-l1t5.onrender.com/api/applications", {
+          const appRes = await fetch("http://localhost:5000/api/applications", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -126,9 +126,6 @@ function JobDetails() {
                 <p className="text-gray-500">{job.location}</p>
               </div>
             </div>
-            <p className="text-gray-500 whitespace-pre-line">
-              {job.companyOverview || "No overview available."}
-            </p>
           </div>
         </div>
       </div>

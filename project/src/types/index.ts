@@ -10,7 +10,6 @@ export interface Job {
   postedDate: string;
   category: string;
   createdAt: string;
-  companyOverview?: string;
 }
 
 export interface Application {
@@ -34,7 +33,6 @@ export interface User {
   role: 'employer' | 'jobseeker';
   company?: string;
   createdAt: string;
-  companyOverview?: string;
 }
 
 export interface StatCardProps {

@@ -13,13 +13,12 @@ function Register() {
     password: '',
     role: 'jobseeker',
     company: '',
-    companyOverview: '', // ✅ new field
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://jobportal-l1t5.onrender.com/api/register', {
+      const response = await fetch('http://localhost:5000/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -99,28 +98,16 @@ function Register() {
 
           {/* Employer-Specific Fields */}
           {formData.role === 'employer' && (
-            <>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Company Name</label>
-                <input
-                  type="text"
-                  value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className={`w-full p-3 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} border focus:ring-2 focus:ring-blue-500`}
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Company Overview</label>
-                <textarea
-                  value={formData.companyOverview}
-                  onChange={(e) => setFormData({ ...formData, companyOverview: e.target.value })}
-                  className={`w-full p-3 rounded-lg h-28 resize-none ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} border focus:ring-2 focus:ring-blue-500`}
-                  placeholder="Describe your company"
-                ></textarea>
-              </div>
-            </>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">Company Name</label>
+              <input
+                type="text"
+                value={formData.company}
+                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                className={`w-full p-3 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} border focus:ring-2 focus:ring-blue-500`}
+                required
+              />
+            </div>
           )}
 
           {/* Submit */}

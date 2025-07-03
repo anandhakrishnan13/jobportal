@@ -4,7 +4,6 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     company: { type: String, default: "" },
-    companyOverview: { type: String }, // Optional, for employers
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: {
@@ -18,7 +17,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// ❌ Prevent exposing password in API responses
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;

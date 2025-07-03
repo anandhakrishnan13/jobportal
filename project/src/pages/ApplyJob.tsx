@@ -20,7 +20,7 @@ function ApplyJob() {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`https://jobportal-l1t5.onrender.com/api/jobs/${id}`);
+        const res = await fetch(`http://localhost:5000/api/jobs/${id}`);
         const data = await res.json();
         setJob(data);
       } catch (err) {
@@ -47,7 +47,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   const token = localStorage.getItem("token"); // ✅ Get token
 
   try {
-    const res = await fetch("https://jobportal-l1t5.onrender.com/api/applications", {
+    const res = await fetch("http://localhost:5000/api/applications", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`, // ✅ Attach token

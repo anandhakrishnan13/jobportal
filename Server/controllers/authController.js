@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_here";
 
 // Register Controller
 export const registerUser = async (req, res) => {
-  const { name, email, password, role, company, companyOverview } = req.body;
+  const { name, email, password, role, company } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -21,7 +21,6 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
       role,
       company,
-      companyOverview, // 👈 include this
     });
 
     await newUser.save();
@@ -38,8 +37,7 @@ export const registerUser = async (req, res) => {
         email: newUser.email,
         role: newUser.role,
         company: newUser.company || "",
-        companyOverview: newUser.companyOverview || "", // 👈 added here
-      },
+        },
       token,
     });
   } catch (err) {
@@ -71,7 +69,7 @@ export const loginUser = async (req, res) => {
         email: user.email,
         role: user.role,
         company: user.company || "",
-        companyOverview: user.companyOverview || "", // 👈 added here
+        
       },
       token,
     });
