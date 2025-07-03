@@ -99,10 +99,23 @@ function JobSeekerDashboard() {
 
   return (
     <div className={`${isDarkMode ? "text-white" : "text-gray-900"}`}>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-4">Job Seeker Dashboard</h1>
-        <p className="text-gray-500">Welcome back, {currentUser?.name}</p>
-      </div>
+      <header className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Job Seeker Dashboard</h1>
+          <p className="text-gray-500">Welcome back, {currentUser?.name}</p>
+        </div>
+
+        <div>
+          <button
+            onClick={() => navigate("/user-profile")}
+            className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white hover:bg-blue-700 transition"
+            title="Go to User Profile"
+          >
+            {/* Initial or Icon */}
+            {currentUser?.name?.charAt(0).toUpperCase() || "C"}
+          </button>
+        </div>
+      </header>
 
       <div className="grid md:grid-cols-4 gap-6 mb-8">
         <StatCard

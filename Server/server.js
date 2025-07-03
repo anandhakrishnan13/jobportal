@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { loginUser, registerUser } from './controllers/authController.js';
+import userRoutes from './routes/userRoutes.js';
 
 
 import jobRoutes from './routes/jobRoutes.js';
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/jobs', jobRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/users', userRoutes);
 
 
 app.post('/api/login', loginUser);

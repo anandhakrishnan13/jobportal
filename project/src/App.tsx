@@ -12,6 +12,8 @@ import Register from './pages/Register';
 import JobPost  from './pages/JobPost';
 import ApplyJob from './pages/ApplyJob';
 import EditJob from "./pages/EditJob";
+import CompanyProfile from './pages/CompanyProfile';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   const isDarkMode = useStore((state) => state.isDarkMode);
@@ -32,6 +34,8 @@ function App() {
             <Route path="/employer/post-job" element={<JobPost/>}/>
             <Route path="/jobs/:id/apply" element={<ApplyJob />} />
             <Route path="/employer/edit-job/:jobId" element={<EditJob />} />
+            <Route path="/employer/company-profile" element={<CompanyProfile/>} />
+            <Route path="/user-profile" element={<UserProfile/>} />
           </Routes>
         </main>
       </BrowserRouter>

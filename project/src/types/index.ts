@@ -33,6 +33,8 @@ export interface User {
   role: 'employer' | 'jobseeker';
   company?: string;
   createdAt: string;
+  companyOverview?: string;
+  companyWebsite?: string;
 }
 
 export interface StatCardProps {

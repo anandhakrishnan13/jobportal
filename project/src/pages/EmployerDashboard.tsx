@@ -121,6 +121,16 @@ function EmployerDashboard() {
       <header className="mb-8">
         <h1 className="text-3xl font-bold">Employer Dashboard</h1>
         <p className="text-gray-500">Welcome back, {currentUser?.name}</p>
+        <div>
+          <button
+            onClick={() => navigate("/employer/company-profile")}
+            className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white hover:bg-blue-700 transition"
+            title="Go to User Profile"
+          >
+            {/* Initial or Icon */}
+            {currentUser?.name?.charAt(0).toUpperCase() || "C"}
+          </button>
+        </div>
       </header>
 
       <div className="grid md:grid-cols-4 gap-6 mb-8">

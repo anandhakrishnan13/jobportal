@@ -4,6 +4,8 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     company: { type: String, default: "" },
+    companyOverview: { type: String },
+    companyWebsite: {type: String},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: {
@@ -11,6 +13,10 @@ const userSchema = new mongoose.Schema(
       enum: ['employer', 'jobseeker'],
       required: true,
     },
+    bio: { type: String, default: "" },
+    education: { type: String, default: "" },
+    skills: { type: [String], default: [] },
+
   },
   {
     timestamps: true,
