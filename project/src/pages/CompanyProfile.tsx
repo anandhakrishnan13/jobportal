@@ -17,7 +17,7 @@ const CompanyProfile = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${currentUser._id}/company-overview`, {
+      const res = await fetch(`https://jobportal-480g.onrender.com/api/users/${currentUser._id}/company-overview`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

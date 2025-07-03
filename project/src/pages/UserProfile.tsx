@@ -15,7 +15,7 @@ function UserProfile() {
   const [editing, setEditing] = useState(false);
 
   const fetchProfile = async () => {
-    const res = await fetch(`http://localhost:5000/api/users/${currentUser._id}/profile`);
+    const res = await fetch(`https://jobportal-480g.onrender.com/api/users/${currentUser._id}/profile`);
     const data = await res.json();
     setProfile(data);
     setLoading(false);
