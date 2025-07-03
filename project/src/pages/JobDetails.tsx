@@ -20,14 +20,14 @@ function JobDetails() {
         setLoading(true);
 
         // 1. Fetch job
-        const res = await fetch(`http://localhost:5000/api/jobs/${id}`);
+        const res = await fetch(`https://jobportal-l1t5.onrender.com/api/jobs/${id}`);
         if (!res.ok) throw new Error("Job not found");
         const jobData = await res.json();
         setJob(jobData);
 
         // 2. Check if jobseeker already applied
         if (currentUser?.role === "jobseeker") {
-          const appRes = await fetch("http://localhost:5000/api/applications");
+          const appRes = await fetch("https://jobportal-l1t5.onrender.com/api/applications");
           const apps = await appRes.json();
 
           const alreadyApplied = apps.some(

@@ -29,8 +29,8 @@ function JobSeekerDashboard() {
     const fetchApplicationsAndJobs = async () => {
       try {
         const [appRes, jobRes] = await Promise.all([
-          fetch("http://localhost:5000/api/applications"),
-          fetch("http://localhost:5000/api/jobs"),
+          fetch("https://jobportal-l1t5.onrender.com/api/applications"),
+          fetch("https://jobportal-l1t5.onrender.com/api/jobs"),
         ]);
         const apps = await appRes.json();
         const jobs = await jobRes.json();

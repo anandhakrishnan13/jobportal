@@ -31,8 +31,8 @@ function EmployerDashboard() {
   const fetchJobsAndApplications = async () => {
     try {
       const [jobRes, appRes] = await Promise.all([
-        fetch("http://localhost:5000/api/jobs"),
-        fetch("http://localhost:5000/api/applications"),
+        fetch("https://jobportal-l1t5.onrender.com/api/jobs"),
+        fetch("https://jobportal-l1t5.onrender.com/api/applications"),
       ]);
       const jobData = await jobRes.json();
       const appData = await appRes.json();
@@ -85,7 +85,7 @@ function EmployerDashboard() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/applications/${selectedApplication._id}/status`,
+        `https://jobportal-l1t5.onrender.com/api/applications/${selectedApplication._id}/status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -357,7 +357,7 @@ function EmployerDashboard() {
                         ) {
                           try {
                             const res = await fetch(
-                              `http://localhost:5000/api/jobs/${job._id}`,
+                              `https://jobportal-l1t5.onrender.com/api/jobs/${job._id}`,
                               {
                                 method: "DELETE",
                               }

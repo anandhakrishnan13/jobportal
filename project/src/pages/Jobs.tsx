@@ -19,7 +19,7 @@ function Jobs() {
       if (selectedCategory) query.append("category", selectedCategory);
 
       const res = await fetch(
-        `http://localhost:5000/api/jobs?${query.toString()}`
+        `https://jobportal-l1t5.onrender.com/api/jobs?${query.toString()}`
       );
       const data = await res.json();
       setJobs(data);

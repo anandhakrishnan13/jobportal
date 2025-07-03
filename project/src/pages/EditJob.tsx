@@ -17,7 +17,7 @@ const EditJob = () => {
 
   const fetchJob = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/jobs/${jobId}`);
+      const res = await fetch(`https://jobportal-l1t5.onrender.com/api/jobs/${jobId}`);
       const data = await res.json();
       setJobData({
         title: data.title,
@@ -41,7 +41,7 @@ const EditJob = () => {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/jobs/${jobId}`, {
+      const res = await fetch(`https://jobportal-l1t5.onrender.com/api/jobs/${jobId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
