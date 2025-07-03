@@ -5,8 +5,9 @@ import User from "../models/User.js";
 // JWT secret key (should be in .env file in real projects)
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_here";
 
+// Register Controller
 export const registerUser = async (req, res) => {
-  const { name, email, password, role, company } = req.body;
+  const { name, email, password, role, company, companyOverview } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -20,6 +21,7 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
       role,
       company,
+      companyOverview, // 👈 include this
     });
 
     await newUser.save();
@@ -36,6 +38,7 @@ export const registerUser = async (req, res) => {
         email: newUser.email,
         role: newUser.role,
         company: newUser.company || "",
+        companyOverview: newUser.companyOverview || "", // 👈 added here
       },
       token,
     });
@@ -45,6 +48,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
+// Login Controller
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -67,6 +71,7 @@ export const loginUser = async (req, res) => {
         email: user.email,
         role: user.role,
         company: user.company || "",
+        companyOverview: user.companyOverview || "", // 👈 added here
       },
       token,
     });
