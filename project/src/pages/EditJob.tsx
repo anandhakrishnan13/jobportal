@@ -13,6 +13,7 @@ const EditJob = () => {
     salary: "",
     description: "",
     category: "",
+    requirements: [],
   });
 
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ const EditJob = () => {
         salary: data.salary,
         description: data.description,
         category: data.category,
+        requirements: Array.isArray(data.requirements) ? data.requirements : [],
       });
     } catch (err) {
       console.error("Failed to fetch job details", err);
@@ -44,12 +46,16 @@ const EditJob = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setJobData((prev) => ({ ...prev, [name]: value }));
+    if (name === "requirements") {
+      const reqArray = value.split(",").map((req) => req.trim()).filter((req) => req);
+      setJobData((prev) => ({ ...prev, requirements: reqArray }));
+    } else {
+      setJobData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const token = localStorage.getItem("token");
 
     try {
@@ -57,12 +63,13 @@ const EditJob = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ Secure request
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           type: jobData.type,
           salary: jobData.salary,
           description: jobData.description,
+          requirements: jobData.requirements,
         }),
       });
 
@@ -90,8 +97,7 @@ const EditJob = () => {
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow rounded">
       <h2 className="text-2xl font-bold mb-2">Edit Job</h2>
       <p className="text-sm text-yellow-600 mb-6">
-        ✨ <strong>Note:</strong> Only <em>Job Type</em>, <em>Salary</em>, and <em>Description</em> can be updated.
-        All other fields are read-only for security reasons.
+        ✨ <strong>Note:</strong> Only <em>Job Type</em>, <em>Salary</em>, <em>Description</em>, and <em>Requirements</em> can be updated.
       </p>
       <form onSubmit={handleUpdate} className="space-y-4">
         <input
@@ -122,6 +128,7 @@ const EditJob = () => {
           disabled
           className="w-full px-4 py-2 border rounded bg-gray-100 text-gray-500"
         />
+
         <select
           name="type"
           value={jobData.type}
@@ -133,14 +140,24 @@ const EditJob = () => {
           <option>Internship</option>
           <option>Remote</option>
         </select>
+
         <input
-          type="number"
+          type="text"
           name="salary"
           value={jobData.salary}
           onChange={handleChange}
           className="w-full px-4 py-2 border rounded"
-          placeholder="Salary"
+          placeholder="e.g. 10000-20000"
         />
+
+        <textarea
+          name="requirements"
+          value={jobData.requirements.join(", ")}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border rounded h-24"
+          placeholder="Comma-separated requirements"
+        ></textarea>
+
         <textarea
           name="description"
           value={jobData.description}
@@ -148,6 +165,7 @@ const EditJob = () => {
           className="w-full px-4 py-2 border rounded h-32"
           placeholder="Description"
         ></textarea>
+
         <div className="flex justify-end gap-4">
           <button
             type="button"
