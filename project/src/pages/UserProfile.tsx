@@ -4,35 +4,60 @@ import { useStore } from "../store";
 function UserProfile() {
   const currentUser = useStore((state) => state.currentUser);
   const isDarkMode = useStore((state) => state.isDarkMode);
-  const [profile, setProfile] = useState({
+
+  const [profile, setProfile] = useState<{
+    name: string;
+    email: string;
+    bio: string;
+    education: string;
+    skills: string[];
+  }>({
     name: "",
     email: "",
     bio: "",
     education: "",
     skills: [],
   });
+
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
 
   const fetchProfile = async () => {
-    const res = await fetch(`https://jobportal-480g.onrender.com/api/users/${currentUser._id}/profile`);
-    const data = await res.json();
-    setProfile(data);
-    setLoading(false);
+    if (!currentUser) return;
+
+    try {
+      const res = await fetch(`https://jobportal-480g.onrender.com/api/users/${currentUser._id}/profile`);
+      if (!res.ok) throw new Error("Failed to fetch user profile");
+      const data = await res.json();
+      setProfile(data);
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSave = async () => {
-    const res = await fetch(`http://localhost:5000/api/users/${currentUser._id}/profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profile),
-    });
+    if (!currentUser) return;
 
-    const data = await res.json();
-    setProfile(data);
-    setEditing(false);
+    try {
+      const res = await fetch(`https://jobportal-480g.onrender.com/api/users/${currentUser._id}/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(profile),
+      });
+
+      if (!res.ok) throw new Error("Failed to update profile");
+
+      const data = await res.json();
+      setProfile(data);
+      setEditing(false);
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      alert("Failed to save profile.");
+    }
   };
 
   useEffect(() => {
@@ -40,6 +65,7 @@ function UserProfile() {
   }, []);
 
   if (loading) return <div>Loading profile...</div>;
+  if (!currentUser) return <div>Please log in to view your profile.</div>;
 
   return (
     <div className={`p-8 ${isDarkMode ? "text-white" : "text-gray-900"}`}>

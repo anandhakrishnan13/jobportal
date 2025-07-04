@@ -14,7 +14,7 @@ export interface Job {
 
 export interface Application {
   _id: string;
-  jobId: string | Job;        // <-- ✅ Can be string (ObjectId) or populated Job
+  jobId: string | Job;        
   userId: string | User; 
   status: 'pending' | 'reviewed' | 'rejected' | 'accepted';
   appliedDate: string;

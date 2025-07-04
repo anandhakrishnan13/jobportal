@@ -2,6 +2,8 @@ import express from "express";
 import User from "../models/User.js";
 
 const router = express.Router();
+
+// ✅ GET Company Profile by User ID
 router.get("/:id/company-profile", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("company companyOverview");
@@ -14,12 +16,10 @@ router.get("/:id/company-profile", async (req, res) => {
   }
 });
 
+// ✅ UPDATE Company Overview
 router.put("/:id/company-overview", async (req, res) => {
   try {
     const { companyOverview } = req.body;
-
-    // console.log("Updating overview:", companyOverview);
-    // console.log("User ID:", req.params.id);
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -36,6 +36,7 @@ router.put("/:id/company-overview", async (req, res) => {
   }
 });
 
+// ✅ GET Company Overview by Company Name (used in Job Details)
 router.get("/company-profile", async (req, res) => {
   try {
     const { name } = req.query;
@@ -46,30 +47,37 @@ router.get("/company-profile", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+// ✅ GET User Profile by ID
 router.get("/:id/profile", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("name email bio education skills");
     if (!user) return res.status(404).json({ error: "User not found" });
     res.json(user);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching user profile" });
+    console.error("Fetch profile error:", err);
+    res.status(500).json({ error: "Failed to fetch profile" });
   }
 });
 
+// ✅ UPDATE User Profile by ID
 router.put("/:id/profile", async (req, res) => {
   try {
     const { name, bio, education, skills } = req.body;
-    const updatedUser = await User.findByIdAndUpdate(
+
+    const user = await User.findByIdAndUpdate(
       req.params.id,
       { name, bio, education, skills },
-      { new: true }
-    );
-    if (!updatedUser) return res.status(404).json({ error: "User not found" });
-    res.json(updatedUser);
+      { new: true, runValidators: true }
+    ).select("name email bio education skills");
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    res.json(user);
   } catch (err) {
-    res.status(500).json({ error: "Error updating user profile" });
+    console.error("Update profile error:", err);
+    res.status(500).json({ error: "Failed to update profile" });
   }
 });
 
-
-export default router; 
+export default router;
