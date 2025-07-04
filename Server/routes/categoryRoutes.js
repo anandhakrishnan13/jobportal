@@ -1,7 +1,6 @@
 import express from "express";
 const router = express.Router();
 
-// Dummy categories (can be from DB in real apps)
 const categories = [
   "IT",
   "Marketing",

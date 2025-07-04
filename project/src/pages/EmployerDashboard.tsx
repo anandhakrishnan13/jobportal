@@ -105,7 +105,7 @@ function EmployerDashboard() {
 
     const updated = await res.json();
 
-    await fetchJobsAndApplications(); // refresh application list
+    await fetchJobsAndApplications(); 
     setSelectedApplication({
       ...selectedApplication,
       status: updated.status,

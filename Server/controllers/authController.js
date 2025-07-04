@@ -2,10 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-// JWT secret key (should be in .env file in real projects)
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_here";
 
-// Register Controller
 export const registerUser = async (req, res) => {
   const { name, email, password, role, company } = req.body;
 
@@ -46,7 +44,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// Login Controller
+
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 

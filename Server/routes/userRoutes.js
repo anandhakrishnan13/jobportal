@@ -3,7 +3,6 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// ✅ GET Company Profile by User ID
 router.get("/:id/company-profile", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("company companyOverview");
@@ -16,7 +15,6 @@ router.get("/:id/company-profile", async (req, res) => {
   }
 });
 
-// ✅ UPDATE Company Overview
 router.put("/:id/company-overview", async (req, res) => {
   try {
     const { companyOverview } = req.body;
@@ -36,7 +34,6 @@ router.put("/:id/company-overview", async (req, res) => {
   }
 });
 
-// ✅ GET Company Overview by Company Name (used in Job Details)
 router.get("/company-profile", async (req, res) => {
   try {
     const { name } = req.query;
@@ -48,7 +45,6 @@ router.get("/company-profile", async (req, res) => {
   }
 });
 
-// ✅ GET User Profile by ID
 router.get("/:id/profile", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("name email bio education skills");
@@ -60,7 +56,6 @@ router.get("/:id/profile", async (req, res) => {
   }
 });
 
-// ✅ UPDATE User Profile by ID
 router.put("/:id/profile", async (req, res) => {
   try {
     const { name, bio, education, skills } = req.body;

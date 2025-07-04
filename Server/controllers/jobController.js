@@ -18,7 +18,7 @@ export const getAllJobs = async (req, res) => {
     const query = {};
 
     if (search) {
-      query.title = { $regex: search, $options: "i" }; // case-insensitive search
+      query.title = { $regex: search, $options: "i" }; 
     }
 
     if (category) {

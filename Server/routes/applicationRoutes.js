@@ -1,12 +1,12 @@
 import express from "express";
-import upload from "../middleware/upload.js"; // memory upload
+import upload from "../middleware/upload.js"; 
 import { createApplication, getAllApplications } from "../controllers/applicationController.js";
 import Application from "../models/Application.js"; 
 
 const router = express.Router();
 
-router.post("/", upload.single("resume"), createApplication);   // POST /api/applications
-router.get("/", getAllApplications);   // GET /api/applications
+router.post("/", upload.single("resume"), createApplication);   
+router.get("/", getAllApplications);   
 
 router.put("/:id/status", async (req, res) => {
   try {
@@ -23,7 +23,6 @@ router.put("/:id/status", async (req, res) => {
       return res.status(404).json({ error: "Application not found" });
     }
 
-    // Prevent changing status after it's been set
     if (application.status !== "pending") {
       return res
         .status(400)

@@ -25,10 +25,8 @@ function Login() {
     const data = await response.json();
 
     if (response.ok) {
-      // ✅ Save JWT token to localStorage
       localStorage.setItem("token", data.token);
 
-      // ✅ Save user data to global state
       setCurrentUser({
         _id: data.user._id,
         name: data.user.name,
@@ -38,7 +36,6 @@ function Login() {
         createdAt: data.user.createdAt,
       });
 
-      // ✅ Redirect based on role
       if (data.user.role === "jobseeker") {
         navigate("/jobs");
       } else if (data.user.role === "employer") {

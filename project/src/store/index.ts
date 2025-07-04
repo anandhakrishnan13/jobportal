@@ -18,8 +18,8 @@ export const useStore = create<Store>()(
       setCurrentUser: (user) => set({ currentUser: user }),
     }),
     {
-      name: "job-portal-store", // Storage key in localStorage
-      partialize: (state) => ({ currentUser: state.currentUser }), // Only persist currentUser
+      name: "job-portal-store", 
+      partialize: (state) => ({ currentUser: state.currentUser }), 
     }
   )
 );

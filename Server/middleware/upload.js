@@ -1,7 +1,7 @@
-// middleware/upload.js
+
 import multer from "multer";
 
-const storage = multer.memoryStorage(); // ✅ for saving files as Buffer
+const storage = multer.memoryStorage(); 
 
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [

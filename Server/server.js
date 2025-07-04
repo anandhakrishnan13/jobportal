@@ -22,7 +22,6 @@ app.use(
 );
 app.use(express.json());
 
-// Routes
 app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/categories", categoryRoutes);
