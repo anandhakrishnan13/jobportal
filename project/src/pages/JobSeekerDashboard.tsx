@@ -104,7 +104,6 @@ function JobSeekerDashboard() {
           <h1 className="text-3xl font-bold">Job Seeker Dashboard</h1>
           <p className="text-gray-500">Welcome back, {currentUser?.name}</p>
         </div>
-
         <div>
           <button
             onClick={() => navigate("/user-profile")}
