@@ -356,7 +356,7 @@ function EmployerDashboard() {
                             const token = localStorage.getItem("token");
 
                             const res = await fetch(
-                              `https://jobportal-l1t5.onrender.com/api/jobs/${job._id}`,
+                              `https://jobportal-480g.onrender.com/api/jobs/${job._id}`,
                               {
                                 method: "DELETE",
                                 headers: {

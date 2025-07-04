@@ -10,10 +10,10 @@ const jobSchema = new mongoose.Schema({
     default: 'Full Time',
     required: true
   },
-  category: { type: String, required: true }, // ✅ required category
+  category: { type: String, required: true }, 
   description: { type: String, required: true },
-  requirements: { type: [String], required: true },              // ✅ optional requirements
-  salary: { type: String, required: true },    // ✅ salary as range (string)
+  requirements: { type: [String], required: true },             
+  salary: { type: String, required: true },    
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
