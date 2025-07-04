@@ -44,13 +44,13 @@ const handleSubmit = async (e: React.FormEvent) => {
   formData.append("coverLetter", coverLetter);
   formData.append("resume", resumeFile);
 
-  const token = localStorage.getItem("token"); // ✅ Get token
+  const token = localStorage.getItem("token"); 
 
   try {
     const res = await fetch("https://jobportal-480g.onrender.com/api/applications", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`, // ✅ Attach token
+        Authorization: `Bearer ${token}`, 
       },
       body: formData,
     });

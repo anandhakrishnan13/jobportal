@@ -1,27 +1,23 @@
-// controllers/applicationController.js
 import Application from "../models/Application.js";
 
 export const createApplication = async (req, res) => {
   try {
     const { jobId, userId, coverLetter } = req.body;
 
-    // ✅ Validate required fields
     if (!jobId || !userId || !coverLetter) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // ✅ Check if the user already applied for this job
     const existingApp = await Application.findOne({ jobId, userId });
     if (existingApp) {
       return res.status(400).json({ error: "You have already applied for this job." });
     }
 
-    // ✅ Create new application with resume file from req.file
     const application = new Application({
       jobId,
       userId,
       coverLetter,
-      appliedDate: new Date(), // or allow client to send it
+      appliedDate: new Date(), 
       resume: req.file
         ? {
             data: req.file.buffer,
