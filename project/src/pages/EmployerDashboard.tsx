@@ -360,7 +360,7 @@ function EmployerDashboard() {
                               {
                                 method: "DELETE",
                                 headers: {
-                                  Authorization: `Bearer ${token}`, // 🔐 add JWT token here
+                                  Authorization: `Bearer ${token}`, 
                                 },
                               }
                             );

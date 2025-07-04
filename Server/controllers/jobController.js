@@ -70,6 +70,7 @@ export const updateJob = async (req, res) => {
 
 
 export const deleteJob = async (req, res) => {
+  console.log("🔥 Reached DELETE /api/jobs/:id with ID:", req.params.id);
   try {
     const deletedJob = await Job.findByIdAndDelete(req.params.id);
 
